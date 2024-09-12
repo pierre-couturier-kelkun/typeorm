@@ -17,17 +17,10 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
           # Defaults to the user or organization that owns the workflow file
           scope: '@pierre-couturier-kelkun'
-      # Install dependencies
-      - run: npm ci
-
-      # Build the package (assuming your package build process creates files in `./build/package`)
-      - run: npm run package
-
-      # Change to the directory where the built package is located and ensure it contains `package.json`
       - run: |
-          ls ./build/package  # List files in the build directory to ensure all files are present
-          cd ./build/package
-          ls  # Verify the content after moving into the build folder
-          npm publish  # Publish the package from the build directory
+            npm ci
+            npm run package
+            cd ./build/package
+            npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
