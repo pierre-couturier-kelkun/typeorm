@@ -2853,9 +2853,9 @@ export class SelectQueryBuilder<Entity extends ObjectLiteral>
                 if (DriverUtils.isPostgresFamily(this.connection.driver))
                     if (column.precision) {
                         // cast to JSON to trigger parsing in the driver
-                        selectionPath = `ST_AsGeoJSON(${selectionPath}, ${column.precision})::json`
+                        selectionPath = `ST_AsGeoJSON(${selectionPath}, ${column.precision})::jsonb`
                     } else {
-                        selectionPath = `ST_AsGeoJSON(${selectionPath})::json`
+                        selectionPath = `ST_AsGeoJSON(${selectionPath})::jsonb`
                     }
                 if (this.connection.driver.options.type === "mssql")
                     selectionPath = `${selectionPath}.ToString()`
