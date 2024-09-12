@@ -19,7 +19,8 @@ jobs:
           scope: '@pierre-couturier-kelkun'
       - run: npm ci
       - run: npm run package
-      - run: cd ./build/package
-      - run: npm publish
+      - run: |
+            cd ./build/package
+            npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
