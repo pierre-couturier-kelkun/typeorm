@@ -16,11 +16,11 @@ jobs:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
           # Defaults to the user or organization that owns the workflow file
-          scope: '@pierre-couturier-kelkun'
+          # scope: '@pierre-couturier-kelkun'
       - run: |
             npm ci
             npm run package
             cd ./build/package
             npm publish --provenance --access public
-        env:
+      - env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
