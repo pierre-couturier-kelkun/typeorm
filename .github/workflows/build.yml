@@ -22,5 +22,5 @@ jobs:
             npm run package
             cd ./build/package
             npm publish --provenance --access public
-      - env:
+        env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
