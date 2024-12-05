@@ -4,6 +4,7 @@ import { ObjectLiteral } from "../common/ObjectLiteral"
 import { OrmUtils } from "../util/OrmUtils"
 import { ApplyValueTransformers } from "../util/ApplyValueTransformers"
 import { ObjectUtils } from "../util/ObjectUtils"
+import { DriverUtils } from "../driver/DriverUtils"
 
 /**
  * Finds what columns are changed in the subject entities.
@@ -125,7 +126,19 @@ export class SubjectChangedColumnsComputer {
                             )
                                 return
                             break
-
+                        case "geography":
+                        case "geometry":
+                            // In "SelectQueryBuilder.buildEscapedEntityColumnSelects" function,
+                            // spatialTypes(geography and geometry) use GeoJson only in Postgres Family
+                            if (
+                                DriverUtils.isPostgresFamily(
+                                    subject.metadata.connection.driver,
+                                ) &&
+                                OrmUtils.deepCompare(entityValue, databaseValue)
+                            ) {
+                                return
+                            }
+                            break
                         case "simple-array":
                             normalizedValue =
                                 DateUtils.simpleArrayToString(entityValue)
@@ -143,6 +156,16 @@ export class SubjectChangedColumnsComputer {
                                 DateUtils.simpleJsonToString(entityValue)
                             databaseValue =
                                 DateUtils.simpleJsonToString(databaseValue)
+                            break
+                        case "enum":
+                            if (
+                                DriverUtils.isPostgresFamily(
+                                    subject.metadata.connection.driver,
+                                )
+                            ) {
+                                normalizedValue = entityValue.toString()
+                                databaseValue = databaseValue.toString()
+                            }
                             break
                     }
 
