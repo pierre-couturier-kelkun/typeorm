@@ -145,6 +145,7 @@ export class SubjectChangedColumnsComputer {
                             databaseValue =
                                 DateUtils.simpleArrayToString(databaseValue)
                             break
+                        case "enum":
                         case "simple-enum":
                             normalizedValue =
                                 DateUtils.simpleEnumToString(entityValue)
@@ -156,16 +157,6 @@ export class SubjectChangedColumnsComputer {
                                 DateUtils.simpleJsonToString(entityValue)
                             databaseValue =
                                 DateUtils.simpleJsonToString(databaseValue)
-                            break
-                        case "enum":
-                            if (
-                                DriverUtils.isPostgresFamily(
-                                    subject.metadata.connection.driver,
-                                )
-                            ) {
-                                normalizedValue = entityValue.toString()
-                                databaseValue = databaseValue.toString()
-                            }
                             break
                     }
 

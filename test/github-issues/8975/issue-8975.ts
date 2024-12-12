@@ -3,6 +3,7 @@ import { exec } from "child_process"
 import { readFileSync, writeFileSync } from "fs"
 import { dirname } from "path"
 import rimraf from "rimraf"
+import { getTypeOrmConfig } from "../../utils/test-utils"
 
 describe("cli init command", () => {
     const cliPath = `${dirname(dirname(dirname(__dirname)))}/src/cli.js`
@@ -57,6 +58,9 @@ describe("cli init command", () => {
     })
 
     for (const databaseOption of databaseOptions) {
+        if (getTypeOrmConfig().find((c) => c.type === databaseOption)?.skip) {
+            continue
+        }
         it(`should work with ${databaseOption} option`, (done) => {
             exec(
                 `${cliPath} init --name ${testProjectName} --database ${databaseOption}`,
